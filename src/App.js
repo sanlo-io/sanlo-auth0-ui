@@ -47,6 +47,7 @@ const App = () => {
   const {
     clientAuth0ShowPasswordVisible = false,
   } = useFlags();
+  console.log(useFlags());
 
   const [authType, setAuthType] = useState('login'); // login | signup
 
@@ -78,6 +79,20 @@ const App = () => {
     if (fromPartnerSite === 'true' || sanlo_flow === 'signup') {
       setAuthType('signup');
     }
+
+
+
+    setTimeout(() => {
+      let auth0config = {};
+      try {
+        // Try and get this crazy Auth0 stuff, this will fail locally
+        auth0config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
+      } catch (e) {
+        console.log(e);
+        auth0config = {};
+      }
+      console.log(auth0config);
+    }, 1000);
 
     setTimeout(() => {
       mainContainerRef.current.style.visibility = 'visible';

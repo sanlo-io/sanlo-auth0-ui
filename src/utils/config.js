@@ -4,8 +4,11 @@ export const parseConfig = () => {
     // Try and get this crazy Auth0 stuff, this will fail locally
     auth0config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
   } catch (e) {
+    console.log(e);
     auth0config = {};
   }
+
+  console.log(auth0config);
 
   // Yank a bunch of weird stuff from the config...
   const {

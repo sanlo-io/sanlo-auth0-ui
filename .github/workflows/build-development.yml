@@ -1,4 +1,4 @@
-name: Release
+name: Build Development
 
 on:
   workflow_dispatch:
@@ -14,7 +14,8 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci --legacy-peer-deps
-      - run: node scripts/release.js
+      - run: npm run build:development
+      - run: node scripts/publish.js development
       - name: git
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
@@ -22,5 +23,5 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
-          git commit -m "Adding latest to releases"
+          git commit -m "Updating latest"
           git push

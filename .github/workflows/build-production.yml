@@ -1,0 +1,27 @@
+name: Build Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci --legacy-peer-deps
+      - run: npm run build:production
+      - run: node scripts/publish.js production
+      - name: git
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git --version
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add .
+          git commit -m "Updating latest"
+          git push

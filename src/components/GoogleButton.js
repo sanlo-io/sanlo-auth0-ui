@@ -1,5 +1,7 @@
 import React from "react";
+import styled from 'styled-components';
 
+import { StyledFormButton } from "../App.styled";
 import { parseError } from "../utils/error";
 
 const TEXT = {
@@ -10,6 +12,15 @@ const TEXT = {
     label: "Sign Up with Google",
   },
 }
+
+const StyledGoogleButton = styled(StyledFormButton)`
+  background-color: #25252a;
+  color: #faf8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 16px;
+`;
 
 const GoogleButton = ({
   config = {},
@@ -43,15 +54,14 @@ const GoogleButton = ({
   };
 
   return (
-    <button
+    <StyledGoogleButton
       type="button"
-      id="btn-google"
-      className={`form-button google-button ${gtmClass}`}
+      className={`form-button ${gtmClass}`}
       onClick={onGoogleLogin}
     >
       <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="" />
       <span>{TEXT[authType].label}</span>
-    </button>
+    </StyledGoogleButton>
   )
 };
 

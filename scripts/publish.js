@@ -1,5 +1,8 @@
 const fs = require('fs-extra');
 
+const args = process.argv.slice(2) || [];
+const env = args[0];
+
 const bumpVersion = () => {
   const raw_package_json = fs.readFileSync('./package.json');
   const package_json = JSON.parse(raw_package_json);
@@ -8,7 +11,14 @@ const bumpVersion = () => {
   try {
     const version_split = version.split('.');
     let [major, minor, patch] = version_split;
-    patch = Number(patch) + 1;
+
+    if (env === "development" || env === "staging") {
+      patch = Number(patch) + 1;
+    }
+    if (env === "production") {
+      minor = Number(minor) + 1;
+    }
+
     const new_version = [major, minor, patch].join('.');
     version = new_version;
   } catch (e) {
@@ -28,11 +38,11 @@ const folders = [
   {
     path: './build/static/js',
     regex: /^(main).[\w]*.js$/,
-    outputFile: `./dist/latest/${version}.js`
+    outputFile: `./dist/${env}/${version}.js`
   }
 ];
 
-fs.emptyDirSync('./dist/latest');
+// fs.emptyDirSync('./dist/development');
 
 folders.forEach(folder => {
   fs.readdirSync(folder.path).forEach(file => {

@@ -52,6 +52,14 @@
       }
     </style>
 
+    <script>
+      window.addEventListener('load', function() {
+        window.auth0config = JSON.parse(
+          decodeURIComponent(escape(window.atob('@@config@@')))
+        );
+      });
+    </script>
+
     <!--
       React App - development | staging | production script includes
       * This should be the only difference with the public/index.html file

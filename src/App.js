@@ -41,13 +41,16 @@ const TEXT = {
 };
 
 const App = () => {
-  const config = parseConfig();
-  const { webAuth } = config;
+  // const config = parseConfig();
+  // const { webAuth } = config;
 
   const {
     clientAuth0ShowPasswordVisible = false,
   } = useFlags();
   console.log(useFlags());
+
+  const [config, setConfig] = useState({});
+  const [webAuth, setWebAuth] = useState(null);
 
   const [authType, setAuthType] = useState('login'); // login | signup
 
@@ -68,8 +71,24 @@ const App = () => {
   const captchaRef = useRef();
 
   useEffect(() => {
+    if (mainContainerRef.current) {
+      setTimeout(() => {
+        mainContainerRef.current.style.visibility = 'visible';
+        mainContainerRef.current.style.opacity = 1;
+      }, 0);
+    }
+  }, [mainContainerRef]);
+
+  useEffect(() => {
+    setConfig(parseConfig(window.auth0config));
+  }, [window.auth0config]);
+
+  useEffect(() => {
+    const { webAuth } = config;
+    if (webAuth) setWebAuth(webAuth);
+
     const {
-      queryParams
+      queryParams = {}
     } = config;
     const {
       sanlo_flow,
@@ -79,27 +98,7 @@ const App = () => {
     if (fromPartnerSite === 'true' || sanlo_flow === 'signup') {
       setAuthType('signup');
     }
-
-
-
-    setTimeout(() => {
-      let auth0config = {};
-      try {
-        // Try and get this crazy Auth0 stuff, this will fail locally
-        auth0config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
-      } catch (e) {
-        console.log(e);
-        auth0config = {};
-      }
-      console.log(auth0config);
-    }, 1000);
-
-    setTimeout(() => {
-      mainContainerRef.current.style.visibility = 'visible';
-      mainContainerRef.current.style.opacity = 1;
-    }, 0);
-    // eslint-disable-next-line
-  }, []);
+  }, [config]);
 
   useEffect(() => {
     if (webAuth && captchaRef.current) {

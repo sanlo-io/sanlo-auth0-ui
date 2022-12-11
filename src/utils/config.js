@@ -1,15 +1,4 @@
-export const parseConfig = () => {
-  let auth0config = {};
-  try {
-    // Try and get this crazy Auth0 stuff, this will fail locally
-    auth0config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
-  } catch (e) {
-    console.log(e);
-    auth0config = {};
-  }
-
-  console.log(auth0config);
-
+export const parseConfig = (auth0config = {}) => {
   // Yank a bunch of weird stuff from the config...
   const {
     callbackURL = "",

@@ -60,7 +60,11 @@ const StyledHeader = styled.div`
 `;
 
 const Header = ({ config = {} }) => {
-  const { queryParams } = config;
+  console.log(config);
+
+  const {
+    queryParams = {},
+  } = config;
   const {
     partnerName,
     partnerLogo,

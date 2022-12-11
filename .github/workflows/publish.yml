@@ -1,12 +1,7 @@
-name: Publish - Staging
+name: Publish
 
 on:
   workflow_dispatch:
-    inputs:
-      featureDeployed:
-        description: 'Auth0 Staging update'
-        required: true
-        default: 'warning'
 
 jobs:
   build:
@@ -20,7 +15,4 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci --legacy-peer-deps
       - run: npm run build
-      - run: node scripts/publish.js staging
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: node scripts/publish.js

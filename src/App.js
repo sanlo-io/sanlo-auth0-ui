@@ -306,11 +306,13 @@ const App = () => {
       mainContainerRef.current.style.visibility = 'visible';
       mainContainerRef.current.style.opacity = 1;
     }, 0);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (captcha) captcha.reload();
     if (errorMessage === 'user_exists') setAuthType('login');
+    // eslint-disable-next-line
   }, [errorMessage]);
 
   const onSubmit = (e) => {
@@ -432,7 +434,7 @@ const App = () => {
           </form>
 
           <div className="provider-label">Powered by{" "}
-            <img className="auth0-logo" src="https://cdn.auth0.com/website/bob/press/logo-light.png" />
+            <img className="auth0-logo" src="https://cdn.auth0.com/website/bob/press/logo-light.png" alt="" />
           </div>
         </div>
       </StyledModal>

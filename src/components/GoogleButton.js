@@ -49,7 +49,7 @@ const GoogleButton = ({
       className={`form-button google-button ${gtmClass}`}
       onClick={onGoogleLogin}
     >
-      <img src="https://pngimg.com/uploads/google/google_PNG19635.png" />
+      <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="" />
       <span>{TEXT[authType].label}</span>
     </button>
   )

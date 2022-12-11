@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from 'styled-components';
-import classnames from "classnames";
 
 const SANLO_MAIN = "https://storage.googleapis.com/auth0-artifacts/sanlo-white-1.png";
 const SANLO_PARTNER = "https://storage.googleapis.com/auth0-artifacts/sanlo_logo_white.svg";

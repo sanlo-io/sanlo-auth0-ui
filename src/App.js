@@ -108,6 +108,9 @@ const App = () => {
       setIsLoading(false);
     }
 
+    console.log(config);
+    console.log(webAuth);
+
     const userPayload = { password: passwordInput };
     if (captcha) userPayload.captcha = captcha.getValue();
 

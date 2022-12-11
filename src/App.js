@@ -49,6 +49,8 @@ const App = () => {
   } = useFlags();
   console.log(useFlags());
 
+  const [configLoaded, setConfigLoaded] = useState(false);
+
   const [config, setConfig] = useState({});
   const [webAuth, setWebAuth] = useState(null);
 
@@ -71,6 +73,15 @@ const App = () => {
   const captchaRef = useRef();
 
   useEffect(() => {
+    setInterval(() => {
+      if (window.auth0config) {
+        console.log('config found');
+        setConfigLoaded(true);
+      }
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
     if (mainContainerRef.current) {
       setTimeout(() => {
         mainContainerRef.current.style.visibility = 'visible';
@@ -81,7 +92,7 @@ const App = () => {
 
   useEffect(() => {
     setConfig(parseConfig(window.auth0config));
-  }, [window.auth0config]);
+  }, [configLoaded]);
 
   useEffect(() => {
     const { webAuth } = config;

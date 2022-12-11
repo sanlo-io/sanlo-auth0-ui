@@ -53,10 +53,15 @@
     </style>
 
     <script>
-      window.addEventListener('load', function() {
-        window.auth0config = JSON.parse(
-          decodeURIComponent(escape(window.atob('@@config@@')))
-        );
+      window.addEventListener('load', () => {
+        try {
+          window.auth0config = JSON.parse(
+            decodeURIComponent(escape(window.atob('@@config@@')))
+          );
+        } catch (e) => {
+          console.log(e);
+          window.auth0config = null;
+        }
       });
     </script>
 

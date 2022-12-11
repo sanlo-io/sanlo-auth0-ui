@@ -79,10 +79,6 @@ const App = () => {
       setAuthType('signup');
     }
 
-    if (webAuth) {
-      setCaptcha(webAuth.renderCaptcha(captchaRef.current));
-    }
-
     setTimeout(() => {
       mainContainerRef.current.style.visibility = 'visible';
       mainContainerRef.current.style.opacity = 1;
@@ -91,10 +87,15 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if (webAuth && captchaRef.current) {
+      setCaptcha(webAuth.renderCaptcha(captchaRef.current));
+    }
+  }, [webAuth, captchaRef]);
+
+  useEffect(() => {
     if (captcha) captcha.reload();
     if (errorMessage === 'user_exists') setAuthType('login');
-    // eslint-disable-next-line
-  }, [errorMessage]);
+  }, [captcha, errorMessage]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -107,10 +108,8 @@ const App = () => {
       setIsLoading(false);
     }
 
-    const userPayload = {
-      password: passwordInput,
-      captcha: captcha.getValue(),
-    }
+    const userPayload = { password: passwordInput };
+    if (captcha) userPayload.captcha = captcha.getValue();
 
     if (authType === "login") {
       webAuth.login({

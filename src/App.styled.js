@@ -282,6 +282,7 @@ export const StyledPasswordValidator = styled.div`
     font-weight: 500;
     opacity: 0.5;
     color: white;
+    white-space: nowrap;
   }
 
   .password-rule {

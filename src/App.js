@@ -340,7 +340,7 @@ const App = () => {
             })}
 
             <div className="password-rules-header">
-              and 3 of the following
+              and contains 3 of the following...
             </div>
             {optionalRules.map((optionalRule) => {
               return (

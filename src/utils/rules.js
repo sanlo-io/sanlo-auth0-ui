@@ -7,19 +7,19 @@ export const requiredRules = [
 
 export const optionalRules = [
   {
-    label: "Contains a lower case letter (a-z)",
+    label: "Lowercase letter (a-z)",
     validator: (s) => (/[a-z]/).test(s),
   },
   {
-    label: "Contains an upper case letter (A-Z)",
+    label: "Uppercase letter (A-Z)",
     validator: (s) => (/[A-Z]/).test(s),
   },
   {
-    label: "Contains a number (i.e. 0-9)",
+    label: "Number (i.e. 0-9)",
     validator: (s) => (/[0-9]/).test(s),
   },
   {
-    label: "Contains a special character (e.g. !@#$%^&*)",
+    label: "Special character (e.g. !@#$%^&*)",
     // eslint-disable-next-line
     validator: (s) => (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/).test(s),
   },

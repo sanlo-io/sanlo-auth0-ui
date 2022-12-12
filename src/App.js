@@ -130,6 +130,7 @@ const App = () => {
     const isExistingUserScenario = (authType === "login" && error.code === "user_exists");
     if (!isExistingUserScenario) setError({});
     setPasswordConfirmInput("");
+    checkValid(emailInput, passwordInput, "");
     // eslint-disable-next-line
   }, [authType]);
 

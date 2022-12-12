@@ -25,7 +25,7 @@ const StyledGoogleButton = styled(StyledFormButton)`
 const GoogleButton = ({
   config = {},
   authType = "login",
-  setErrorMessage = () => {},
+  setError = () => {},
 }) => {
   const { webAuth } = config;
   const gtmClass = `gtm-sanlo-button-${authType}-google`;
@@ -49,7 +49,7 @@ const GoogleButton = ({
     }
 
     webAuth.authorize(payload, (err) => {
-      setErrorMessage(parseError(err));
+      setError(parseError(err));
     });
   };
 

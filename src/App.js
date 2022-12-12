@@ -63,7 +63,7 @@ const App = () => {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
 
   const [captcha, setCaptcha] = useState()
   const captchaRef = useRef();
@@ -123,8 +123,14 @@ const App = () => {
 
   useEffect(() => {
     if (captcha) captcha.reload();
-    if (errorMessage === 'user_exists') setAuthType('login');
-  }, [captcha, errorMessage]);
+    if (error && error.code === 'user_exists') setAuthType('login');
+  }, [captcha, error]);
+
+  useEffect(() => {
+    const isExistingUserScenario = (authType === "login" && error && error.code === "user_exists");
+    if (!isExistingUserScenario) setError(null);
+    // eslint-disable-next-line
+  }, [authType]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -132,7 +138,7 @@ const App = () => {
     setIsLoading(true);
 
     const handleResponse = (err) => {
-      setErrorMessage(parseError(err));
+      setError(parseError(err));
       setIsDisabled(false);
       setIsLoading(false);
     }
@@ -167,12 +173,10 @@ const App = () => {
     if (type === "email") {
       emailValue = value;
       setEmailInput(emailValue);
-    }
-    if (type === "password") {
+    } else if (type === "password") {
       passwordValue = value;
       setPasswordInput(passwordValue);
-    }
-    if (type === "password-confirm") {
+    } else if (type === "password-confirm") {
       passwordConfirmValue = value;
       setPasswordConfirmInput(passwordConfirmValue);
     }
@@ -228,7 +232,7 @@ const App = () => {
   return (
     <StyledApp ref={mainContainerRef}>
       <Header config={config} />
-      <GradientBG isError={Boolean(errorMessage)} />
+      <GradientBG isError={Boolean(error)} />
 
       <StyledModal>
         <StyledHeader>
@@ -241,8 +245,8 @@ const App = () => {
           </h5>
         </StyledHeader>
 
-        {errorMessage && (
-          <StyledError>{errorMessage}</StyledError>
+        {error.message && (
+          <StyledError>{error.message}</StyledError>
         )}
 
         <form onSubmit={() => { return false; }} method="post">
@@ -317,7 +321,7 @@ const App = () => {
             <GoogleButton
               config={config}
               authType={authType}
-              setErrorMessage={setErrorMessage}
+              setError={setError}
             />
           </StyledFormButtons>
 

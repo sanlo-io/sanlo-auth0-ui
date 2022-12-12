@@ -11,7 +11,7 @@ const parseMultipleErrors = (errors) => {
   return div.innerHTML;
 };
 
-export const parseError = (err) => {
+export const parseError = (err = {}) => {
   const {
     code = "",
     description = ""

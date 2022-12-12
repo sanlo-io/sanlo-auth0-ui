@@ -63,7 +63,7 @@ const App = () => {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState({});
 
   const [captcha, setCaptcha] = useState()
   const captchaRef = useRef();
@@ -123,12 +123,12 @@ const App = () => {
 
   useEffect(() => {
     if (captcha) captcha.reload();
-    if (error && error.code === 'user_exists') setAuthType('login');
+    if (error.code === 'user_exists') setAuthType('login');
   }, [captcha, error]);
 
   useEffect(() => {
-    const isExistingUserScenario = (authType === "login" && error && error.code === "user_exists");
-    if (!isExistingUserScenario) setError(null);
+    const isExistingUserScenario = (authType === "login" && error.code === "user_exists");
+    if (!isExistingUserScenario) setError({});
     // eslint-disable-next-line
   }, [authType]);
 
@@ -232,7 +232,7 @@ const App = () => {
   return (
     <StyledApp ref={mainContainerRef}>
       <Header config={config} />
-      <GradientBG isError={Boolean(error)} />
+      <GradientBG isError={Boolean(error.code)} />
 
       <StyledModal>
         <StyledHeader>

@@ -243,7 +243,23 @@ const App = () => {
         </StyledHeader>
 
         {error.message && (
-          <StyledError>{error.message}</StyledError>
+          <StyledError>
+            {(() => {
+              if (Array.isArray(error.message)) {
+                return (
+                  <>
+                    {error.message.map((message) => {
+                      return (
+                        <p className="error-p">{message}</p>
+                      );
+                    })}
+                  </>
+                );
+              } else {
+                return error.message;
+              }
+            })()}
+          </StyledError>
         )}
 
         <form onSubmit={() => { return false; }} method="post">

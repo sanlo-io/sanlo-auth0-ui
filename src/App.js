@@ -129,9 +129,14 @@ const App = () => {
   useEffect(() => {
     const isExistingUserScenario = (authType === "login" && error.code === "user_exists");
     if (!isExistingUserScenario) setError({});
-    checkValid();
+    setPasswordConfirmInput("");
     // eslint-disable-next-line
   }, [authType]);
+
+  useEffect(() => {
+    checkValid();
+    // eslint-disable-next-line
+  }, [emailInput, passwordInput, passwordConfirmInput]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -166,23 +171,13 @@ const App = () => {
     const el = e.currentTarget;
     const value = el.value;
     const type = el.getAttribute("data-type");
-
-    let emailValue = emailInput;
-    let passwordValue = passwordInput;
-    let passwordConfirmValue = passwordConfirmInput;
-
     if (type === "email") {
-      emailValue = value;
-      setEmailInput(emailValue);
+      setEmailInput(value);
     } else if (type === "password") {
-      passwordValue = value;
-      setPasswordInput(passwordValue);
+      setPasswordInput(value);
     } else if (type === "password-confirm") {
-      passwordConfirmValue = value;
-      setPasswordConfirmInput(passwordConfirmValue);
+      setPasswordConfirmInput(value);
     }
-
-    checkValid(emailValue, passwordValue, passwordConfirmValue);
   }
 
   const checkValid = (email, password, passwordConfirm) => {

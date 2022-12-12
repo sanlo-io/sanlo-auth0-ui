@@ -1,6 +1,6 @@
 {
   "name": "sanlo-auth0-ui",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": false,
   "dependencies": {
     "@craco/craco": "^7.0.0",

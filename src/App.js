@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFlags } from "launchdarkly-react-client-sdk";
+import classnames from 'classnames';
 
 import {
   StyledApp,
@@ -11,6 +12,7 @@ import {
   StyledConfirmPassword,
   StyledForgotPassword,
   StyledError,
+  StyledPasswordValidator,
 } from './App.styled';
 
 import Header from './components/Header';
@@ -20,6 +22,7 @@ import GoogleButton from './components/GoogleButton';
 
 import { parseConfig } from './utils/config';
 import { parseError } from './utils/error';
+import { requiredRules, optionalRules } from './utils/rules';
 
 const TEXT = {
   login: {
@@ -60,6 +63,7 @@ const App = () => {
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordConfirmInput, setPasswordConfirmInput] = useState('');
+  const [passwordInputFocused, setPasswordInputFocused] = useState(false);
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -187,23 +191,39 @@ const App = () => {
     passwordConfirm = passwordConfirm || passwordConfirmInput;
 
     let goodEmail = false;
-    if (Boolean(email)) {
-      goodEmail = true;
-    }
+    if (Boolean(email)) goodEmail = true;
 
     let goodPassword = false;
-    if (Boolean(password)) {
-      if (typeof password === 'string') {
-        if (password.length >= 8) {
-          goodPassword = true;
-        }
-      }
-    }
 
-    if (authType === "signup" && goodPassword) {
-      if (password !== passwordConfirm) {
-        goodPassword = false;
+    if (Boolean(password)) {
+      let requiredCount = 0;
+      let requiredMet = false;
+      requiredRules.forEach((requiredRule) => {
+        const isValid = requiredRule.validator(password);
+        if (isValid) requiredCount += 1;
+      });
+
+      if (requiredCount === requiredRules.length) {
+        requiredMet = true;
       }
+
+      let optionalCount = 0;
+      let optionalMet = false;
+      optionalRules.forEach((optionalRule) => {
+        const isValid = optionalRule.validator(password);
+        if (isValid) optionalCount += 1;
+      });
+
+      if (optionalCount >= 3) {
+        optionalMet = true;
+      }
+
+      let confirmMet = false;
+      if (authType === "signup" && password === passwordConfirm) {
+        confirmMet = true;
+      }
+
+      goodPassword = (requiredMet && optionalMet && confirmMet);
     }
 
     setIsDisabled(!goodEmail || !goodPassword);
@@ -295,9 +315,45 @@ const App = () => {
               placeholder="Enter your password"
               onKeyDown={onInputChange}
               onKeyUp={onInputChange}
-              onBlur={onInputChange}
+              onFocus={(e) => {
+                setPasswordInputFocused(true);
+              }}
+              onBlur={(e) => {
+                onInputChange(e)
+                setPasswordInputFocused(false);
+              }}
             />
           </StyledFormSection>
+
+          <StyledPasswordValidator className={classnames({
+            'is-visible': (authType === "signup" && (passwordInput || passwordInputFocused))
+          })}>
+            <div className="password-rules-header">
+              Password rules
+            </div>
+            {requiredRules.map((requiredRule) => {
+              return (
+                <div className={classnames("password-rule", {
+                  "is-valid": requiredRule.validator(passwordInput),
+                })}>{requiredRule.label}</div>
+              );
+            })}
+
+            <div className="password-rules-header">
+              and 3 of the following
+            </div>
+            {optionalRules.map((optionalRule) => {
+              return (
+                <div className={classnames("password-rule", {
+                  "is-valid": optionalRule.validator(passwordInput),
+                })}>{optionalRule.label}</div>
+              );
+            })}
+
+            <div className={classnames("password-match", {
+              "is-valid": passwordInput === passwordConfirmInput,
+            })}>Passwords Match</div>
+          </StyledPasswordValidator>
 
           {(authType === "signup") && (
             <StyledConfirmPassword>
@@ -308,7 +364,13 @@ const App = () => {
                 placeholder="Please confirm your password"
                 onKeyDown={onInputChange}
                 onKeyUp={onInputChange}
-                onBlur={onInputChange}
+                onFocus={(e) => {
+                  setPasswordInputFocused(true);
+                }}
+                onBlur={(e) => {
+                  onInputChange(e)
+                  setPasswordInputFocused(false);
+                }}
               />
             </StyledConfirmPassword>
           )}

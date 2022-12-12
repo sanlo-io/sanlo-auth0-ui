@@ -1,24 +1,26 @@
-export const rules = [
+export const requiredRules = [
   {
-    message: "At least %d characters in length",
-    format: [8],
-    code: "lengthAtLeast",
-  }, {
-    message: "Contain at least %d of the following %d types of characters:",
-    code: "containsAtLeast",
-    format: [3, 4],
-    items: [{
-      message: "lower case letters (a-z)",
-      code: "lowerCase",
-    }, {
-      message: "upper case letters (A-Z)",
-      code: "upperCase",
-    }, {
-      message: "numbers (i.e. 0-9)",
-      code: "numbers",
-    }, {
-      message: "special characters (e.g. !@#$%^&*)",
-      code: "specialCharacters",
-    }],
+    label: "At least 8 characters in length",
+    validator: (s) => (s.length >= 8),
+  },
+];
+
+export const optionalRules = [
+  {
+    label: "Contains a lower case letter (a-z)",
+    validator: (s) => (/[a-z]/).test(s),
+  },
+  {
+    label: "Contains an upper case letter (A-Z)",
+    validator: (s) => (/[A-Z]/).test(s),
+  },
+  {
+    label: "Contains a number (i.e. 0-9)",
+    validator: (s) => (/[0-9]/).test(s),
+  },
+  {
+    label: "Contains a special character (e.g. !@#$%^&*)",
+    // eslint-disable-next-line
+    validator: (s) => (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/).test(s),
   },
 ];

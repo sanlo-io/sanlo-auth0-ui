@@ -165,6 +165,7 @@ export const StyledFormButton = styled.button`
   text-align: center;
   background-color: #ff5c79;
   color: #020202;
+  transition: all 0.5s ease;
 
   span {
     font-weight: 500;
@@ -255,5 +256,60 @@ export const StyledError = styled.div`
 
   .error-icon {
     margin-right: 8px;
+  }
+`;
+
+export const StyledPasswordValidator = styled.div`
+  box-shadow: 0px 0px 48px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: 95%;
+  top: 30%;
+  background-color: #2a2a2f;
+  padding: 16px 20px;
+  border-radius: 12px;
+  z-index: 20;
+  transition: all 0.35s ease;
+  visibility: hidden;
+  opacity: 0;
+
+  &.is-visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .password-rules-header {
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.5;
+    color: white;
+  }
+
+  .password-rule {
+    white-space: nowrap;
+    color: white;
+    font-size: 14px;
+    margin: 8px 0;
+    color: #ff5c79;
+    transition: all 0.5s ease;
+    opacity: 0.8;
+
+    &.is-valid {
+      color: #62b762;
+      opacity: 1;
+    }
+  }
+
+  .password-match {
+    margin-top: 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff5c79;
+    transition: all 0.5s ease;
+    opacity: 0.8;
+
+    &.is-valid {
+      color: #62b762;
+      opacity: 1;
+    }
   }
 `;

@@ -1,5 +1,5 @@
-const parseMultipleErrors = (errors) => {
-  const errorsArray = errors.split('\n');
+const parsePasswordPolicy = (policy = "") => {
+  const errorsArray = policy.split('\n');
   const div = document.createElement('div');
   errorsArray.forEach((error) => {
     error.trim();
@@ -28,7 +28,7 @@ export const parseError = (err = {}) => {
       //   "policy": "* At least 8 characters in length\n* Contain at least 3 of the following 4 types of characters:\n * lower case letters (a-z)\n * upper case letters (A-Z)\n * numbers (i.e. 0-9)\n * special characters (e.g. !@#$%^&*)",
       //   "statusCode": 400
       // }
-      message = parseMultipleErrors(err);
+      message = parsePasswordPolicy(err.policy);
       break;
     }
 

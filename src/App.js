@@ -129,6 +129,7 @@ const App = () => {
   useEffect(() => {
     const isExistingUserScenario = (authType === "login" && error.code === "user_exists");
     if (!isExistingUserScenario) setError({});
+    checkValid();
     // eslint-disable-next-line
   }, [authType]);
 

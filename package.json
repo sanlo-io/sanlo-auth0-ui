@@ -3,6 +3,7 @@
   "version": "0.1.12",
   "private": false,
   "dependencies": {
+    "@craco/craco": "^7.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,13 +15,15 @@
     "styled-components": "^5.3.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "start:local": "REACT_APP_ENV=local npm start",
+    "start:development": "REACT_APP_ENV=development npm start",
+    "start:staging": "REACT_APP_ENV=staging npm start",
+    "build": "sh -ac 'if (test -z \"$REACT_APP_ENV\") ; then export REACT_APP_ENV=development; fi; echo REACT_APP_ENV=$REACT_APP_ENV && . ./.env.${REACT_APP_ENV}; craco build'",
     "build:development": "REACT_APP_ENV=development npm run build",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "craco test"
   },
   "eslintConfig": {
     "extends": [

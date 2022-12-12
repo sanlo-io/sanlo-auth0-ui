@@ -73,13 +73,21 @@ const App = () => {
   const captchaRef = useRef();
 
   useEffect(() => {
-    setInterval(() => {
+    let configInterval = null;
+
+    const checkConfig = () => {
       if (window.auth0config) {
-        console.log('config found');
+        console.log('Auth0 Config Loaded', window.auth0config);
         setConfigLoaded(true);
+        window.clearInterval(configInterval);
       }
-    }, 1000);
-  }, [])
+    }
+
+    checkConfig();
+    configInterval = setInterval(() => {
+      checkConfig();
+    }, 250);
+  }, []);
 
   useEffect(() => {
     if (mainContainerRef.current) {

@@ -10,6 +10,7 @@ import App from './App';
 
   const LDProvider = await asyncWithLDProvider({
     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_CLIENT_SIDE_ID,
+    sendEvents: false,
   });
 
   root.render(

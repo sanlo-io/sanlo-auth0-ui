@@ -1,5 +1,16 @@
 import styled from 'styled-components';
 
+const NoSelect = styled.div`
+  * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
+`
+
 export const StyledApp = styled.div`
   position: absolute;
   height: 100%;
@@ -9,6 +20,15 @@ export const StyledApp = styled.div`
   visibility: hidden;
   opacity: 0;
   transition: all 0.5s ease;
+
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
 
   .provider-label {
     display: flex;
@@ -94,7 +114,7 @@ export const StyledConfirmPassword = styled(StyledFormSection)`
   height: 56px;
 `;
 
-export const StyledForgotPassword = styled.div`
+export const StyledForgotPassword = styled(NoSelect)`
   height: 56px;
 
   hr {
@@ -185,7 +205,7 @@ export const StyledModal = styled.div`
   z-index: 10;
 `;
 
-export const StyledHeader = styled.div`
+export const StyledHeader = styled(NoSelect)`
   margin-bottom: 24px;
 
   .title {

@@ -58,7 +58,7 @@
           window.auth0config = JSON.parse(
             decodeURIComponent(escape(window.atob('@@config@@')))
           );
-        } catch (e) => {
+        } catch (e) {
           console.log(e);
           window.auth0config = null;
         }

@@ -41,13 +41,9 @@ const TEXT = {
 };
 
 const App = () => {
-  // const config = parseConfig();
-  // const { webAuth } = config;
-
   const {
     clientAuth0ShowPasswordVisible = false,
   } = useFlags();
-  console.log(useFlags());
 
   const [configLoaded, setConfigLoaded] = useState(false);
 
@@ -140,9 +136,6 @@ const App = () => {
       setIsDisabled(false);
       setIsLoading(false);
     }
-
-    console.log(config);
-    console.log(webAuth);
 
     const userPayload = { password: passwordInput };
     if (captcha) userPayload.captcha = captcha.getValue();

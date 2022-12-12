@@ -60,8 +60,6 @@ const StyledHeader = styled.div`
 `;
 
 const Header = ({ config = {} }) => {
-  console.log(config);
-
   const {
     queryParams = {},
   } = config;

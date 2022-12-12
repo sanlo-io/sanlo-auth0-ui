@@ -222,6 +222,9 @@ const App = () => {
       if (authType === "signup" && password && passwordConfirm && password === passwordConfirm) {
         confirmMet = true;
       }
+      if (authType === "login") {
+        confirmMet = true;
+      }
 
       goodPassword = (requiredMet && optionalMet && confirmMet);
     }

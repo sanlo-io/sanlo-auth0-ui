@@ -219,7 +219,7 @@ const App = () => {
       }
 
       let confirmMet = false;
-      if (authType === "signup" && password === passwordConfirm) {
+      if (authType === "signup" && password && passwordConfirm && password === passwordConfirm) {
         confirmMet = true;
       }
 
@@ -351,7 +351,7 @@ const App = () => {
             })}
 
             <div className={classnames("password-match", {
-              "is-valid": passwordInput === passwordConfirmInput,
+              "is-valid": (passwordInput && passwordConfirmInput && passwordInput === passwordConfirmInput),
             })}>Passwords Match</div>
           </StyledPasswordValidator>
 

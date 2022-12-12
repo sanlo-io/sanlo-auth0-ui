@@ -263,7 +263,7 @@ export const StyledPasswordValidator = styled.div`
   box-shadow: 0px 0px 48px rgba(0, 0, 0, 0.4);
   position: absolute;
   left: 95%;
-  top: 30%;
+  top: 37%;
   background-color: #2a2a2f;
   padding: 16px 20px;
   border-radius: 12px;

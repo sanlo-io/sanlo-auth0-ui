@@ -19,6 +19,7 @@ import Header from './components/Header';
 import GradientBG from './components/GradientBG';
 import Loader from './components/Loader';
 import GoogleButton from './components/GoogleButton';
+import Disclaimer from './components/Disclaimer';
 
 import { parseConfig } from './utils/config';
 import { parseError } from './utils/error';
@@ -416,6 +417,8 @@ const App = () => {
           <img className="auth0-logo" src="https://cdn.auth0.com/website/bob/press/logo-light.png" alt="" />
         </div>
       </StyledModal>
+
+      <Disclaimer authType={authType} />
     </StyledApp>
   );
 };

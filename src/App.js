@@ -25,11 +25,13 @@ import { parseConfig } from './utils/config';
 import { parseError } from './utils/error';
 import { requiredRules, optionalRules } from './utils/rules';
 
+const SANLO_WEB_URL = process.env.REACT_APP_SANLO_WEB_URL;
+
 const TEXT = {
   login: {
     title: "Welcome to Sanlo",
     subtitle: "Don't have an account?",
-    toggle_cta: "Sign Up",
+    subtitle_cta: "Sign Up",
     submit: "Log In",
     email_label: "Email",
     password_label: "Password",
@@ -37,7 +39,7 @@ const TEXT = {
   signup: {
     title: "Let's get started",
     subtitle: "Already have an account?",
-    toggle_cta: "Log in",
+    subtitle_cta: "Log in",
     submit: "Sign Up",
     email_label: "Email",
     password_label: "Password (min 8 characters)",
@@ -262,7 +264,7 @@ const App = () => {
             {TEXT[authType].subtitle}{" "}
             <span className="subtitle-label" onClick={() => {
               setAuthType(authType === "login" ? "signup" : "login");
-            }}>{TEXT[authType].toggle_cta}</span>
+            }}>{TEXT[authType].subtitle_cta}</span>
           </h5>
         </StyledHeader>
 
@@ -408,7 +410,7 @@ const App = () => {
             <StyledForgotPassword>
               <hr />
               <span>Forgot your password?{" "}</span>
-              <a href="https://app.sanlo.io/change-password">Click Here</a>
+              <a href={`${SANLO_WEB_URL}{/change-password`}>Click Here</a>
             </StyledForgotPassword>
           )}
         </form>

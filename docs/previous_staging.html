@@ -425,9 +425,44 @@
       text-align: center;
     }
 
+    .form-button {
+      text-align: center;
+    }
+
     .col-3 {
       width: 0.5rem;
       margin: 0 auto;
+    }
+
+    #disclaimer {
+      z-index: 9;
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.01em;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 30rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.5s ease;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+      color: rgb(180, 180, 180);
+    }
+    #disclaimer a {
+      color: #FF5C79;
+      cursor: pointer;
+    }
+    #disclaimer a:first-child {
+      text-decoration: none;
+    }
+    #disclaimer a:first-child {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -537,6 +572,12 @@
     </div>
   </div>
 
+  <div id="disclaimer">
+    By creating an account, you confirm you have read, understand and accept Sanlo's
+    <a href="https://www.sanlo.io/privacy-policy" target="_blank">Privacy Policy</a> and
+    <a href="https://www.sanlo.io/terms-of-use" target="_blank">Terms of Use</a>.
+  </div>
+
   <!--[if IE 8]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
   <![endif]-->
@@ -583,6 +624,14 @@
           boxes[i].style.display = 'none';
         }
         document.getElementById(box).style.display = 'block';
+
+        if (box === 'signup-box') {
+          document.getElementById('disclaimer').style.visibility = 'visible';
+          document.getElementById('disclaimer').style.opacity = 1;
+        } else {
+          document.getElementById('disclaimer').style.visibility = 'hidden';
+          document.getElementById('disclaimer').style.opacity = 0;
+        }
       }
 
       let leftGrad = document.getElementById('leftGrad');
@@ -662,6 +711,9 @@
       setTimeout(() => {
         document.getElementById('main-container').style.visibility = 'visible';
         document.getElementById('main-container').style.opacity = 1;
+
+        // document.getElementById('disclaimer').style.visibility = 'visible';
+        // document.getElementById('disclaimer').style.opacity = 1;
       }, 0);
 
       var leeway = config.internalOptions.leeway;
@@ -835,6 +887,14 @@
           boxes[i].style.display = 'none';
         }
         document.getElementById(box).style.display = 'block';
+
+        if (box === 'signup-box') {
+          document.getElementById('disclaimer').style.visibility = 'visible';
+          document.getElementById('disclaimer').style.opacity = 1;
+        } else {
+          document.getElementById('disclaimer').style.visibility = 'hidden';
+          document.getElementById('disclaimer').style.opacity = 0;
+        }
       }
 
       document.getElementById('btn-login').addEventListener('click', login);

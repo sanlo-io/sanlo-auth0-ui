@@ -1,98 +1,54 @@
 import React from "react";
 import styled from 'styled-components';
-
-const SANLO_MAIN = "https://storage.googleapis.com/auth0-artifacts/sanlo-white-1.png";
-const SANLO_PARTNER = "https://storage.googleapis.com/auth0-artifacts/sanlo_logo_white.svg";
+import TEXT from "../utils/text";
 
 const StyledHeader = styled.div`
-  position: relative;
-  height: 5rem;
+  margin-bottom: 24px;
 
-  .main-sanlo-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-    z-index: 501;
-  }
-
-  .partner-site-link {
-    z-index: 501;
-    font-family: 'Inter';
+  .title {
+    font-family: Roober, 'Inter', sans-serif;
+    margin: 0 0 8px 0;
+    color: #faf8f8;
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: 0.01em;
+    line-height: 32px;
     font-style: normal;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    line-height: 16px;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #C5C5C5;
-    position: absolute;
-    top: 32px;
-    left: 64px;
-    text-decoration: none;
+    margin: 0;
+    letter-spacing: 0.01em;
+    color: #c5c5c5;
   }
 
-  .branding-container {
-    position: absolute;
-    top: 0;
-    z-index: 500;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
+  .subtitle-label {
+    cursor: pointer;
+    color: #ff5c79;
   }
 
-  .partner-branding-img {
-    height: 2.25rem;
-  }
-
-  .branding-divider {
-    color: white;
-    font-size: 36px;
-    font-weight: 100;
-    margin: 0 1rem;
-  }
-
-  .sanlo-branding-img {
-    height: 1.5rem;
+  .subtitle-label:hover {
+    text-decoration: underline;
   }
 `;
 
-const Header = ({ config = {} }) => {
-  const {
-    queryParams = {},
-  } = config;
-  const {
-    partnerName,
-    partnerLogo,
-    partnerSite,
-  } = queryParams;
-
-  const hasPartnerLogo = Boolean(partnerLogo);
-  const hasPartnerRedirect = Boolean(partnerName) && Boolean(partnerSite);
-
+const Header = ({ page, setPage }) => {
   return (
     <StyledHeader>
-      {hasPartnerRedirect && (
-        <a className="partner-site-link" href={partnerSite}>
-          {`<- Back to ${partnerName}`}
-        </a>
-      )}
-
-      {!hasPartnerRedirect && (
-        <a className="main-sanlo-logo" href="https://sanlo.io">
-          <img className="sanlo-logo" src={SANLO_MAIN} alt="sanlo-logo" />
-        </a>
-      )}
-
-      {hasPartnerLogo && (
-        <div className="branding-container">
-          <img className="partner-branding-img" src={partnerLogo} alt="partner-logo" />
-          <div className="branding-divider">+</div>
-          <img className="sanlo-branding-img" src={SANLO_PARTNER} alt="sanlo-logo" />
-        </div>
-      )}
+      <h3 className="title">{TEXT[page].title}</h3>
+      <h5 className="subtitle">
+        {TEXT[page].subtitle}{" "}
+        <span className="subtitle-label" onClick={() => {
+          setPage({
+            "login": "signup",
+            "signup": "login",
+            "reset": "login",
+          }[page]);
+        }}>{TEXT[page].subtitle_cta}</span>
+      </h5>
     </StyledHeader>
   );
 };

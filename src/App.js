@@ -1,21 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFlags } from "launchdarkly-react-client-sdk";
-import classnames from 'classnames';
+import TEXT from "./utils/text";
 
 import {
   StyledApp,
   StyledModal,
-  StyledHeader,
   StyledFormSection,
   StyledFormButtons,
   StyledFormButton,
   StyledConfirmPassword,
   StyledForgotPassword,
-  StyledError,
-  StyledPasswordValidator,
 } from './App.styled';
 
 import Header from './components/Header';
+import Error from './components/Error';
+import Validator from './components/Validator';
+
+import Branding from './components/Branding';
 import GradientBG from './components/GradientBG';
 import Loader from './components/Loader';
 import GoogleButton from './components/GoogleButton';
@@ -24,27 +25,6 @@ import Disclaimer from './components/Disclaimer';
 import { parseConfig } from './utils/config';
 import { parseError } from './utils/error';
 import { requiredRules, optionalRules } from './utils/rules';
-
-const SANLO_WEB_URL = process.env.REACT_APP_SANLO_WEB_URL;
-
-const TEXT = {
-  login: {
-    title: "Welcome to Sanlo",
-    subtitle: "Don't have an account?",
-    subtitle_cta: "Sign Up",
-    submit: "Log In",
-    email_label: "Email",
-    password_label: "Password",
-  },
-  signup: {
-    title: "Let's get started",
-    subtitle: "Already have an account?",
-    subtitle_cta: "Log in",
-    submit: "Sign Up",
-    email_label: "Email",
-    password_label: "Password (min 8 characters)",
-  },
-};
 
 const App = () => {
   const {
@@ -148,10 +128,13 @@ const App = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     setIsDisabled(true);
     setIsLoading(true);
 
-    const handleResponse = (err) => {
+    const handleResponse = (err, resp) => {
+      console.log(err);
+      console.log(resp);
       setError(parseError(err));
       setIsDisabled(false);
       setIsLoading(false);
@@ -172,6 +155,12 @@ const App = () => {
         connection: 'Username-Password-Authentication',
         email: emailInput,
       }, handleResponse);
+    } else if (authType === "reset") {
+      console.log("Reset");
+      webAuth.changePassword({
+        connection: 'db-conn',
+        email: emailInput,
+      }, handleResponse);
     }
   };
 
@@ -189,12 +178,22 @@ const App = () => {
   }
 
   const checkValid = (email, password, passwordConfirm) => {
+
+    // Fix for reset,
+
+
+
     email = email || emailInput;
     password = password || passwordInput;
     passwordConfirm = passwordConfirm || passwordConfirmInput;
 
     let goodEmail = false;
     if (Boolean(email)) goodEmail = true;
+
+    if (authType === "reset") {
+      setIsDisabled(!goodEmail);
+      return;
+    }
 
     let goodPassword = false;
 
@@ -254,39 +253,12 @@ const App = () => {
 
   return (
     <StyledApp ref={mainContainerRef}>
-      <Header config={config} />
+      <Branding config={config} />
       <GradientBG isError={Boolean(error.code)} />
 
       <StyledModal>
-        <StyledHeader>
-          <h3 className="title">{TEXT[authType].title}</h3>
-          <h5 className="subtitle">
-            {TEXT[authType].subtitle}{" "}
-            <span className="subtitle-label" onClick={() => {
-              setAuthType(authType === "login" ? "signup" : "login");
-            }}>{TEXT[authType].subtitle_cta}</span>
-          </h5>
-        </StyledHeader>
-
-        {error.message && (
-          <StyledError>
-            {(() => {
-              if (Array.isArray(error.message)) {
-                return (
-                  <>
-                    {error.message.map((message) => {
-                      return (
-                        <p className="error-p">{message}</p>
-                      );
-                    })}
-                  </>
-                );
-              } else {
-                return error.message;
-              }
-            })()}
-          </StyledError>
-        )}
+        <Header page={authType} setPage={setAuthType} />
+        <Error error={error} />
 
         <form onSubmit={() => { return false; }} method="post">
           <StyledFormSection>
@@ -304,62 +276,40 @@ const App = () => {
             />
           </StyledFormSection>
 
-          <StyledFormSection>
-            <div className="label-container">
-              <label>{TEXT[authType].password_label}</label>
-              {clientAuth0ShowPasswordVisible && (
-                <div
-                  className="show-password-toggle"
-                  onClick={onShowPasswordToggle}
-                >Show Password</div>
-              )}
-            </div>
-            <input
-              ref={passwordInputRef}
-              data-type="password"
-              type="password"
-              placeholder="Enter your password"
-              onKeyDown={onInputChange}
-              onKeyUp={onInputChange}
-              onFocus={(e) => {
-                setPasswordInputFocused(true);
-              }}
-              onBlur={(e) => {
-                onInputChange(e)
-                setPasswordInputFocused(false);
-              }}
-            />
-          </StyledFormSection>
+          {(authType !== "reset") && (
+            <StyledFormSection>
+              <div className="label-container">
+                <label>{TEXT[authType].password_label}</label>
+                {clientAuth0ShowPasswordVisible && (
+                  <div
+                    className="show-password-toggle"
+                    onClick={onShowPasswordToggle}
+                  >Show Password</div>
+                )}
+              </div>
+              <input
+                ref={passwordInputRef}
+                data-type="password"
+                type="password"
+                placeholder="Enter your password"
+                onKeyDown={onInputChange}
+                onKeyUp={onInputChange}
+                onFocus={(e) => {
+                  setPasswordInputFocused(true);
+                }}
+                onBlur={(e) => {
+                  onInputChange(e)
+                  setPasswordInputFocused(false);
+                }}
+              />
+            </StyledFormSection>
+          )}
 
-          <StyledPasswordValidator className={classnames({
-            'is-visible': (authType === "signup" && (passwordInput || passwordInputFocused))
-          })}>
-            <div className="password-rules-header">
-              Password rules
-            </div>
-            {requiredRules.map((requiredRule) => {
-              return (
-                <div className={classnames("password-rule", {
-                  "is-valid": requiredRule.validator(passwordInput),
-                })}>{requiredRule.label}</div>
-              );
-            })}
-
-            <div className="password-rules-header">
-              and contains 3 of the following...
-            </div>
-            {optionalRules.map((optionalRule) => {
-              return (
-                <div className={classnames("password-rule", {
-                  "is-valid": optionalRule.validator(passwordInput),
-                })}>{optionalRule.label}</div>
-              );
-            })}
-
-            <div className={classnames("password-match", {
-              "is-valid": (passwordInput && passwordConfirmInput && passwordInput === passwordConfirmInput),
-            })}>Passwords Match</div>
-          </StyledPasswordValidator>
+          <Validator
+            isVisible={(authType === "signup" && (passwordInput || passwordInputFocused))}
+            passwordInput={passwordInput}
+            passwordConfirmInput={passwordConfirmInput}
+          />
 
           {(authType === "signup") && (
             <StyledConfirmPassword>
@@ -397,20 +347,25 @@ const App = () => {
               {!isLoading && <span>{TEXT[authType].submit}</span>}
             </StyledFormButton>
 
-            <span className="or-btn-divider">OR</span>
-
-            <GoogleButton
-              config={config}
-              authType={authType}
-              setError={setError}
-            />
+            {(authType !== "reset") && (
+              <>
+                <span className="or-btn-divider">OR</span>
+                <GoogleButton
+                  config={config}
+                  authType={authType}
+                  setError={setError}
+                />
+              </>
+            )}
           </StyledFormButtons>
 
           {(authType === "login") && (
             <StyledForgotPassword>
               <hr />
               <span>Forgot your password?{" "}</span>
-              <a href={`${SANLO_WEB_URL}{/change-password`}>Click Here</a>
+              <span className="cta" onClick={() => {
+                setAuthType("reset");
+              }}>Click Here</span>
             </StyledForgotPassword>
           )}
         </form>

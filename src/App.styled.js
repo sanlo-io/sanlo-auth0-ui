@@ -129,7 +129,7 @@ export const StyledForgotPassword = styled(NoSelect)`
     text-decoration: none;
   }
 
-  a {
+  .cta {
     color: #ff5c79;
     font-size: 14px;
     line-height: 16px;
@@ -204,113 +204,4 @@ export const StyledModal = styled.div`
   padding: 32px 40px 40px 40px;
   border-radius: 12px;
   z-index: 10;
-`;
-
-export const StyledHeader = styled(NoSelect)`
-  margin-bottom: 24px;
-
-  .title {
-    font-family: Roober, 'Inter', sans-serif;
-    margin: 0 0 8px 0;
-    color: #faf8f8;
-    font-weight: 600;
-    font-size: 24px;
-    letter-spacing: 0.01em;
-    line-height: 32px;
-    font-style: normal;
-  }
-
-  .subtitle {
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 400;
-    margin: 0;
-    letter-spacing: 0.01em;
-    color: #c5c5c5;
-  }
-
-  .subtitle-label {
-    cursor: pointer;
-    color: #ff5c79;
-  }
-
-  .subtitle-label:hover {
-    text-decoration: underline;
-  }
-`;
-
-
-export const StyledError = styled.div`
-  background-color: rgba(255, 92, 121, 0.1);
-  color: #ff5c79;
-  padding: 8px 12px;
-  font-size: 14px;
-  line-height: 16px;
-  letter-spacing: 0.01em;
-  border-radius: 10px;
-  margin: 24px 0;
-
-  .error-p {
-    margin: 10px 0;
-  }
-
-  .error-icon {
-    margin-right: 8px;
-  }
-`;
-
-export const StyledPasswordValidator = styled.div`
-  box-shadow: 0px 0px 48px rgba(0, 0, 0, 0.4);
-  position: absolute;
-  left: 95%;
-  top: 37%;
-  background-color: #2a2a2f;
-  padding: 16px 20px;
-  border-radius: 12px;
-  z-index: 20;
-  transition: all 0.35s ease;
-  visibility: hidden;
-  opacity: 0;
-
-  &.is-visible {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .password-rules-header {
-    font-size: 16px;
-    font-weight: 500;
-    opacity: 0.5;
-    color: white;
-    white-space: nowrap;
-  }
-
-  .password-rule {
-    white-space: nowrap;
-    color: white;
-    font-size: 14px;
-    margin: 8px 0;
-    color: #ff5c79;
-    transition: all 0.5s ease;
-    opacity: 0.8;
-
-    &.is-valid {
-      color: #62b762;
-      opacity: 1;
-    }
-  }
-
-  .password-match {
-    margin-top: 24px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff5c79;
-    transition: all 0.5s ease;
-    opacity: 0.8;
-
-    &.is-valid {
-      color: #62b762;
-      opacity: 1;
-    }
-  }
 `;

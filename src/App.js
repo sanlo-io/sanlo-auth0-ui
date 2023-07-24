@@ -158,7 +158,7 @@ const App = () => {
     } else if (authType === "reset") {
       console.log("Reset");
       webAuth.changePassword({
-        connection: 'db-conn',
+        connection: 'Username-Password-Authentication',
         email: emailInput,
       }, handleResponse);
     }

@@ -357,6 +357,7 @@ const App = () => {
                 <label>{TEXT[authType].email_label}</label>
               </div>
               <input
+                data-test-id="email-input"
                 ref={emailInputRef}
                 data-type="email"
                 type="email"
@@ -380,6 +381,7 @@ const App = () => {
                 )}
               </div>
               <input
+                data-test-id="password-input"
                 ref={passwordInputRef}
                 data-type="password"
                 type="password"
@@ -406,6 +408,7 @@ const App = () => {
           {(authType === "signup") && (
             <StyledConfirmPassword>
               <input
+                data-test-id="password-confirm-input"
                 ref={passwordConfirmInputRef}
                 data-type="password-confirm"
                 type="password"
@@ -431,6 +434,7 @@ const App = () => {
           <StyledFormButtons>
             {!authType.match(/reset_/) && (
               <StyledFormButton
+                data-test-id={`${authType}-submit`}
                 type="submit"
                 className={`gtm-sanlo-button-${authType}-submit`}
                 disabled={isDisabled}
@@ -445,6 +449,7 @@ const App = () => {
               <>
                 <span className="or-btn-divider">OR</span>
                 <GoogleButton
+                  data-test-id={`${authType}-google`}
                   className={`gtm-sanlo-button-${authType}-google`}
                   config={config}
                   authType={authType}
@@ -458,9 +463,13 @@ const App = () => {
             <StyledForgotPassword>
               <hr />
               <span>Haven't received it?{" "}</span>
-              <span className="cta" onClick={(e) => {
-                onSubmit(e);
-              }}>Resend Link</span>
+              <span
+                data-test-id="email-not-received"
+                className="cta"
+                onClick={(e) => {
+                  onSubmit(e);
+                }}
+              >Resend Link</span>
             </StyledForgotPassword>
           )}
 
@@ -468,9 +477,13 @@ const App = () => {
             <StyledForgotPassword>
               <hr />
               <span>Forgot your password?{" "}</span>
-              <span className="cta" onClick={() => {
-                setAuthType("reset");
-              }}>Click Here</span>
+              <span
+                data-test-id="forgot-password"
+                className="cta"
+                  onClick={() => {
+                  setAuthType("reset");
+                }}
+              >Click Here</span>
             </StyledForgotPassword>
           )}
         </form>

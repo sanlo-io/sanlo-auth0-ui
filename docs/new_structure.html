@@ -17,6 +17,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In to Sanlo</title>
 
+    <style>
+      @font-face {
+        font-family: "Roobert";
+        src: url("https://storage.googleapis.com/auth0-artifacts/Roobert-Regular.woff") format('woff');
+      }
+
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+
+      body, html {
+        height: 100%;
+        font-family: 'Inter', 'Helvetica', sans-serif;
+        background: rgb(15, 15, 18);
+        box-sizing: border-box;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      .no-select {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none;
+      }
+    </style>
+
     <script>
       window.addEventListener('load', () => {
         try {

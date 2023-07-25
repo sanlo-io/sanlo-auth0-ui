@@ -1,4 +1,6 @@
 export const parseError = (err = {}) => {
+  if (!err || !Object.keys(err).length) return null;
+
   const {
     code = "",
     description = ""

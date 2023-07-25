@@ -22,6 +22,14 @@ const TEXT = {
     submit: "Send Recovery Link",
     email_label: "Email",
   },
+  reset_sent: {
+    title: "Reset your password",
+    description: (email) => `We've sent a password reset link to ${email} if there is a Sanlo account under this email address. Please check your inbox and spam folder.`,
+  },
+  reset_resent: {
+    title: "Reset your password",
+    description: (email) => `We've re-sent a password reset link to ${email} if there is a Sanlo account under this email address. Please check your inbox and spam folder.`,
+  },
 };
 
 export default TEXT;

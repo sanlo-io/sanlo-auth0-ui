@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFlags } from "launchdarkly-react-client-sdk";
+import styled from 'styled-components';
+
 import TEXT from "./utils/text";
 
 import {
@@ -12,7 +14,6 @@ import {
   StyledForgotPassword,
 } from './App.styled';
 
-import Header from './components/Header';
 import Error from './components/Error';
 import Validator from './components/Validator';
 
@@ -25,6 +26,41 @@ import Disclaimer from './components/Disclaimer';
 import { parseConfig } from './utils/config';
 import { parseError } from './utils/error';
 import { requiredRules, optionalRules } from './utils/rules';
+
+const LOCAL = process.env.REACT_APP_ENV === "local";
+
+const StyledHeader = styled.div`
+  margin-bottom: 24px;
+
+  .title {
+    font-family: Roober, 'Inter', sans-serif;
+    margin: 0 0 8px 0;
+    color: #faf8f8;
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: 0.01em;
+    line-height: 32px;
+    font-style: normal;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.01em;
+    color: #c5c5c5;
+  }
+
+  .subtitle-label {
+    cursor: pointer;
+    color: #ff5c79;
+  }
+
+  .subtitle-label:hover {
+    text-decoration: underline;
+  }
+`;
 
 const App = () => {
   const {
@@ -52,6 +88,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({});
 
+  const [resetCount, setResetCount] = useState(0);
+
   const [captcha, setCaptcha] = useState()
   const captchaRef = useRef();
 
@@ -71,6 +109,13 @@ const App = () => {
       checkConfig();
     }, 250);
   }, []);
+
+
+  useEffect(() => {
+    if (authType.match(/reset/) && resetCount > 0) {
+      setAuthType(resetCount === 1 ? "reset_sent" : "reset_resent");
+    }
+  }, [resetCount]);
 
   useEffect(() => {
     if (mainContainerRef.current) {
@@ -117,12 +162,15 @@ const App = () => {
     const isExistingUserScenario = (authType === "login" && error.code === "user_exists");
     if (!isExistingUserScenario) setError({});
     setPasswordConfirmInput("");
-    checkValid(emailInput, passwordInput, "");
+    if (!authType.match(/reset_/)) {
+      // Dont check on the reset password message modals
+      checkValid(emailInput, passwordInput, "");
+    }
     // eslint-disable-next-line
   }, [authType]);
 
   useEffect(() => {
-    checkValid();
+    if (!authType.match(/reset_/)) checkValid();
     // eslint-disable-next-line
   }, [emailInput, passwordInput, passwordConfirmInput]);
 
@@ -133,30 +181,35 @@ const App = () => {
     setIsLoading(true);
 
     const handleResponse = (err, resp) => {
-      console.log(err);
-      console.log(resp);
-      setError(parseError(err));
+      if (err) setError(parseError(err));
       setIsDisabled(false);
       setIsLoading(false);
+      // We've just sent you an email to reset your password.
+      if (resp.match(/We've just sent/)) {
+        console.log(resetCount)
+        setResetCount(resetCount + 1);
+      }
     }
 
     const userPayload = { password: passwordInput };
     if (captcha) userPayload.captcha = captcha.getValue();
 
     if (authType === "login") {
+      if (LOCAL) return handleResponse(null, null);
       webAuth.login({
         ...userPayload,
         realm: 'Username-Password-Authentication',
         username: emailInput,
       }, handleResponse);
     } else if (authType === "signup") {
+      if (LOCAL) return handleResponse(null, null);
       webAuth.redirect.signupAndLogin({
         ...userPayload,
         connection: 'Username-Password-Authentication',
         email: emailInput,
       }, handleResponse);
-    } else if (authType === "reset") {
-      console.log("Reset");
+    } else if (authType.match(/reset_/)) {
+      if (LOCAL) return handleResponse(null, "We've just sent you an email to reset your password.");
       webAuth.changePassword({
         connection: 'Username-Password-Authentication',
         email: emailInput,
@@ -178,11 +231,6 @@ const App = () => {
   }
 
   const checkValid = (email, password, passwordConfirm) => {
-
-    // Fix for reset,
-
-
-
     email = email || emailInput;
     password = password || passwordInput;
     passwordConfirm = passwordConfirm || passwordConfirmInput;
@@ -257,26 +305,47 @@ const App = () => {
       <GradientBG isError={Boolean(error.code)} />
 
       <StyledModal>
-        <Header page={authType} setPage={setAuthType} />
+        <StyledHeader>
+          <h3 className="title">{TEXT[authType].title}</h3>
+          {TEXT[authType].subtitle && (
+            <h5 className="subtitle">
+              {TEXT[authType].subtitle}{" "}
+              <span className="subtitle-label" onClick={() => {
+                setAuthType({
+                  "login": "signup",
+                  "signup": "login",
+                  "reset": "login",
+                }[authType]);
+              }}>{TEXT[authType].subtitle_cta}</span>
+            </h5>
+          )}
+          {TEXT[authType].description && (
+            <h5 className="subtitle">
+              {TEXT[authType].description(emailInput)}
+            </h5>
+          )}
+        </StyledHeader>
         <Error error={error} />
 
         <form onSubmit={() => { return false; }} method="post">
-          <StyledFormSection>
-            <div className="label-container">
-              <label>{TEXT[authType].email_label}</label>
-            </div>
-            <input
-              ref={emailInputRef}
-              data-type="email"
-              type="email"
-              placeholder="Enter your work email address"
-              onKeyDown={onInputChange}
-              onKeyUp={onInputChange}
-              onBlur={onInputChange}
-            />
-          </StyledFormSection>
+          {!authType.match(/reset_/) && (
+            <StyledFormSection>
+              <div className="label-container">
+                <label>{TEXT[authType].email_label}</label>
+              </div>
+              <input
+                ref={emailInputRef}
+                data-type="email"
+                type="email"
+                placeholder="Enter your work email address"
+                onKeyDown={onInputChange}
+                onKeyUp={onInputChange}
+                onBlur={onInputChange}
+              />
+            </StyledFormSection>
+          )}
 
-          {(authType !== "reset") && (
+          {(!authType.match(/reset/)) && (
             <StyledFormSection>
               <div className="label-container">
                 <label>{TEXT[authType].password_label}</label>
@@ -337,17 +406,19 @@ const App = () => {
           />
 
           <StyledFormButtons>
-            <StyledFormButton
-              type="submit"
-              className={`is-primary gtm-sanlo-button-${authType}-submit`}
-              disabled={isDisabled}
-              onClick={onSubmit}
-            >
-              {isLoading && <Loader/>}
-              {!isLoading && <span>{TEXT[authType].submit}</span>}
-            </StyledFormButton>
+            {!authType.match(/reset_/) && (
+              <StyledFormButton
+                type="submit"
+                className={`is-primary gtm-sanlo-button-${authType}-submit`}
+                disabled={isDisabled}
+                onClick={onSubmit}
+              >
+                {isLoading && <Loader/>}
+                {!isLoading && <span>{TEXT[authType].submit}</span>}
+              </StyledFormButton>
+            )}
 
-            {(authType !== "reset") && (
+            {!authType.match(/reset/) && (
               <>
                 <span className="or-btn-divider">OR</span>
                 <GoogleButton
@@ -358,6 +429,16 @@ const App = () => {
               </>
             )}
           </StyledFormButtons>
+
+          {authType.match(/reset_/) && (
+            <StyledForgotPassword>
+              <hr />
+              <span>Haven't received it?{" "}</span>
+              <span className="cta" onClick={(e) => {
+                onSubmit(e);
+              }}>Resend Link</span>
+            </StyledForgotPassword>
+          )}
 
           {(authType === "login") && (
             <StyledForgotPassword>
@@ -370,9 +451,11 @@ const App = () => {
           )}
         </form>
 
-        <div className="provider-label">Powered by{" "}
-          <img className="auth0-logo" src="https://cdn.auth0.com/website/bob/press/logo-light.png" alt="" />
-        </div>
+        {!authType.match(/reset_/) && (
+          <div className="provider-label">Powered by{" "}
+            <img className="auth0-logo" src="https://cdn.auth0.com/website/bob/press/logo-light.png" alt="" />
+          </div>
+        )}
       </StyledModal>
 
       <Disclaimer authType={authType} />

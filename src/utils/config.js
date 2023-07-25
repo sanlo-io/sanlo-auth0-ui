@@ -48,9 +48,9 @@ export const parseConfig = (auth0config = {}) => {
     // auth0 won't be defined locally
     // eslint-disable-next-line
     webAuth = new auth0.WebAuth(auth0params);
-    console.log(webAuth);
+    // console.log(webAuth);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 
   return {

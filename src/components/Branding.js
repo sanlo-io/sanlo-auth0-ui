@@ -12,7 +12,6 @@ const StyledHeader = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    visibility: hidden;
     z-index: 501;
   }
 
@@ -40,7 +39,6 @@ const StyledHeader = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    visibility: hidden;
   }
 
   .partner-branding-img {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import styled from 'styled-components';
+import mixpanel from "mixpanel-browser";
 
 import TEXT from "./utils/text";
 
@@ -28,6 +29,11 @@ import { parseError } from './utils/error';
 import { requiredRules, optionalRules } from './utils/rules';
 
 const LOCAL = process.env.REACT_APP_ENV === "local";
+
+const addToDataLayer = (data) => {
+  if (!window || !window.dataLayer) return;
+  window.dataLayer.push(data);
+};
 
 const StyledHeader = styled.div`
   margin-bottom: 24px;
@@ -72,7 +78,7 @@ const App = () => {
   const [config, setConfig] = useState({});
   const [webAuth, setWebAuth] = useState(null);
 
-  const [authType, setAuthType] = useState('login'); // login | signup
+  const [authType, setAuthType] = useState('login');
 
   const mainContainerRef = useRef();
   const emailInputRef = useRef();
@@ -109,7 +115,6 @@ const App = () => {
       checkConfig();
     }, 250);
   }, []);
-
 
   useEffect(() => {
     if (authType.match(/reset/) && resetCount > 0) {
@@ -197,6 +202,13 @@ const App = () => {
     if (captcha) userPayload.captcha = captcha.getValue();
 
     if (authType === "login") {
+      addToDataLayer({
+        event: "Login Submit",
+        email: emailInput,
+      });
+      mixpanel.track("Login Submit", {
+        email: emailInput,
+      });
       if (LOCAL) return handleResponse(null, null);
       webAuth.login({
         ...userPayload,
@@ -204,6 +216,13 @@ const App = () => {
         username: emailInput,
       }, handleResponse);
     } else if (authType === "signup") {
+      addToDataLayer({
+        event: "Signup Submit",
+        email: emailInput,
+      });
+      mixpanel.track("Signup Submit", {
+        email: emailInput,
+      });
       if (LOCAL) return handleResponse(null, null);
       webAuth.redirect.signupAndLogin({
         ...userPayload,
@@ -211,6 +230,13 @@ const App = () => {
         email: emailInput,
       }, handleResponse);
     } else if (authType.match(/reset/)) {
+      addToDataLayer({
+        event: "Password Reset",
+        email: emailInput,
+      });
+      mixpanel.track("Password Reset", {
+        email: emailInput,
+      });
       if (LOCAL) return handleResponse(null, "We've just sent you an email to reset your password.");
       webAuth.changePassword({
         connection: 'Username-Password-Authentication',
@@ -321,11 +347,9 @@ const App = () => {
               }}>{TEXT[authType].subtitle_cta}</span>
             </h5>
           )}
-          {TEXT[authType].description && (
-            <h5 className="subtitle">
-              {TEXT[authType].description(emailInput)}
-            </h5>
-          )}
+          {TEXT[authType].description && (<>
+            {TEXT[authType].description(emailInput)}
+          </>)}
         </StyledHeader>
         <Error error={error} />
 
@@ -411,12 +435,12 @@ const App = () => {
             {!authType.match(/reset_/) && (
               <StyledFormButton
                 type="submit"
-                className={`is-primary gtm-sanlo-button-${authType}-submit`}
+                className={`gtm-sanlo-button-${authType}-submit`}
                 disabled={isDisabled}
                 onClick={onSubmit}
               >
                 {isLoading && <Loader/>}
-                {!isLoading && <span>{TEXT[authType].submit}</span>}
+                {!isLoading && TEXT[authType].submit}
               </StyledFormButton>
             )}
 

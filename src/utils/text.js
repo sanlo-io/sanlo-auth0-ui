@@ -1,3 +1,15 @@
+import React, { useEffect, useState, useRef } from 'react';
+import styled from 'styled-components';
+
+const StyledDescription = styled.h5`
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.01em;
+  color: #c5c5c5;
+`;
+
 const TEXT = {
   login: {
     title: "Welcome to Sanlo",
@@ -24,11 +36,15 @@ const TEXT = {
   },
   reset_sent: {
     title: "Reset your password",
-    description: (email) => `We've sent a password reset link to ${email} if there is a Sanlo account under this email address. Please check your inbox and spam folder.`,
+    description: (email) => (
+      <StyledDescription>{`We've sent a password reset link to `}<strong>{email}</strong>{` if there is a Sanlo account under this email address. Please check your inbox and spam folder.`}</StyledDescription>
+    ),
   },
   reset_resent: {
     title: "Reset your password",
-    description: (email) => `We've re-sent a password reset link to ${email} if there is a Sanlo account under this email address. Please check your inbox and spam folder.`,
+    description: (email) => (
+      <StyledDescription>{`We've re-sent a password reset link to `}<strong>{email}</strong>{` if there is a Sanlo account under this email address. Please check your inbox and spam folder.`}</StyledDescription>
+    ),
   },
 };
 

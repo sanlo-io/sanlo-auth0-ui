@@ -2,6 +2,8 @@ import React from "react";
 import styled from 'styled-components';
 import classnames from 'classnames';
 
+import { alphaTrim } from "../utils/general";
+
 import {
   requiredRules,
   optionalRules,
@@ -77,7 +79,7 @@ const Validator = ({
       </div>
       {requiredRules.map((requiredRule) => {
         return (
-          <div className={classnames("password-rule", {
+          <div key={`key_rule_${alphaTrim(requiredRule.label)}`} className={classnames("password-rule", {
             "is-valid": requiredRule.validator(passwordInput),
           })}>{requiredRule.label}</div>
         );
@@ -88,7 +90,7 @@ const Validator = ({
       </div>
       {optionalRules.map((optionalRule) => {
         return (
-          <div className={classnames("password-rule", {
+          <div key={`key_rule_${alphaTrim(optionalRule.label)}`} className={classnames("password-rule", {
             "is-valid": optionalRule.validator(passwordInput),
           })}>{optionalRule.label}</div>
         );

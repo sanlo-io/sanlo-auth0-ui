@@ -670,6 +670,8 @@
 
       // Parse the callbackURL query parms
       const [base_url, url_params] = config.callbackURL.split('?');
+      console.log(base_url);
+      console.log(url_params);
       const parsed_params = {};
       if (url_params) {
         const split_params = url_params.split('&');
@@ -678,6 +680,7 @@
           parsed_params[p_key] = p_val;
         });
       }
+      console.log(parsed_params);
 
       const {
         sanlo_flow,
@@ -701,6 +704,16 @@
       } else {
         document.getElementById('main-sanlo-logo-link').style.visibility = 'visible';
       }
+
+      // const isBranded = Boolean(partnerName) && Boolean(partnerLogo) && Boolean(partnerSite);
+      // if (isBranded) {
+      //   document.getElementById('branding').style.visibility = 'visible';
+      //   document.getElementById('partner-branding').setAttribute('src', partnerLogo);
+      //   document.getElementById('partner-site').href = partnerSite;
+      //   document.getElementById('partner-site').innerHTML = `<- Back to ${partnerName}`;
+      // } else {
+      //   document.getElementById('main-sanlo-logo-link').style.visibility = 'visible';
+      // }
 
       if (fromPartnerSite === 'true' || sanlo_flow === 'signup') {
 		    toggleBox('signup-box');
@@ -843,7 +856,7 @@
           case 'invalid_user_password':
             return 'Please check your login credentials.';
           case 'user_exists':
-            return "Looks like you already have a Sanlo account. Please log in or click the “Forgot your password?” link to reset your password.";
+            return 'Looks like you already have Sanlo account. Please sign in or click “Forgot your password” link on the sign-in screen to reset your password.'
           case 'invalid_password':
             return parseMultipleErrors(error.policy).innerHTML;
           default:
@@ -901,5 +914,8 @@
       document.getElementById('btn-google-signup').addEventListener('click', loginWithGoogle);
     });
   </script>
+  <!-- Start of HubSpot Embed Code -->
+  <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/21209223.js"></script>
+  <!-- End of HubSpot Embed Code -->
 </body>
 </html>

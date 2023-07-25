@@ -186,14 +186,11 @@ const App = () => {
     setIsLoading(true);
 
     const handleResponse = (err, resp) => {
-      console.log(err, resp);
-
       if (err) setError(parseError(err));
       setIsDisabled(false);
       setIsLoading(false);
       // We've just sent you an email to reset your password.
       if (resp && resp.match(/We've just sent/)) {
-        console.log(resetCount)
         setResetCount(resetCount + 1);
       }
     }
@@ -448,6 +445,7 @@ const App = () => {
               <>
                 <span className="or-btn-divider">OR</span>
                 <GoogleButton
+                  className={`gtm-sanlo-button-${authType}-google`}
                   config={config}
                   authType={authType}
                   setError={setError}

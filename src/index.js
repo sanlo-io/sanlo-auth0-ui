@@ -5,7 +5,6 @@ import { asyncWithLDProvider } from "launchdarkly-react-client-sdk";
 import LogRocket from "logrocket";
 import mixpanel from "mixpanel-browser";
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
 
 import App from './App';
 
@@ -66,11 +65,11 @@ if (process.env.REACT_APP_SENTRY_URL) {
     dsn: process.env.REACT_APP_SENTRY_URL,
     // This sets the sample rate to be 10%. You may want this to be 100% while
     // in development and sample at a lower rate in production
-    replaysSessionSampleRate: 0.1,
+    replaysSessionSampleRate: 0.2,
     // If the entire session is not sampled, use the below sample rate to sample
     // sessions when an error occurs.
     replaysOnErrorSampleRate: 1.0,
-    integrations: [new BrowserTracing(), new Sentry.Replay()],
+    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
     environment: process.env.REACT_APP_ENV,
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.

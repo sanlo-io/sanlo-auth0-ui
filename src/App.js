@@ -210,7 +210,7 @@ const App = () => {
         connection: 'Username-Password-Authentication',
         email: emailInput,
       }, handleResponse);
-    } else if (authType.match(/reset_/)) {
+    } else if (authType.match(/reset/)) {
       if (LOCAL) return handleResponse(null, "We've just sent you an email to reset your password.");
       webAuth.changePassword({
         connection: 'Username-Password-Authentication',

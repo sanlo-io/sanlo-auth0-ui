@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledDescription = styled.h5`

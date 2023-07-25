@@ -8,6 +8,8 @@ import * as Sentry from "@sentry/react";
 
 import App from './App';
 
+import "./assets/index.css";
+
 if (process.env.REACT_APP_MIXPANEL) {
   mixpanel.init(process.env.REACT_APP_MIXPANEL, {
     debug: true,

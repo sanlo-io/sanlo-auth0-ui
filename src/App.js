@@ -331,17 +331,21 @@ const App = () => {
 
       <StyledModal>
         <StyledHeader>
-          <h3 className="title">{TEXT[authType].title}</h3>
+          <h3 className="title no-select">{TEXT[authType].title}</h3>
           {TEXT[authType].subtitle && (
-            <h5 className="subtitle">
+            <h5 className="subtitle no-select">
               {TEXT[authType].subtitle}{" "}
-              <span className="subtitle-label" onClick={() => {
-                setAuthType({
-                  "login": "signup",
-                  "signup": "login",
-                  "reset": "login",
-                }[authType]);
-              }}>{TEXT[authType].subtitle_cta}</span>
+              <span
+                data-test-id={`${authType}-cta`}
+                className="subtitle-label"
+                onClick={() => {
+                  setAuthType({
+                    "login": "signup",
+                    "signup": "login",
+                    "reset": "login",
+                  }[authType]);
+                }}
+              >{TEXT[authType].subtitle_cta}</span>
             </h5>
           )}
           {TEXT[authType].description && (<>

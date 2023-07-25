@@ -50,6 +50,22 @@ export const StyledApp = styled.div`
   }
 `;
 
+export const StyledEye = styled.i`
+  position: absolute !important;
+  top: 0.6rem;
+  right: 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: all 0.5s ease;
+
+  &.enabled {
+    opacity: 0.6;
+  }
+`;
+
 export const StyledFormSection = styled.div`
   margin-bottom: 24px;
 
@@ -57,6 +73,10 @@ export const StyledFormSection = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  .input-container {
+    position: relative;
   }
 
   label {
@@ -67,19 +87,6 @@ export const StyledFormSection = styled.div`
     opacity: 0.5;
     letter-spacing: 0.01em;
     margin-bottom: 8px;
-  }
-
-  .show-password-toggle {
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    opacity: 0.3;
-    cursor: pointer;
-    transition: all 0.5s ease;
-
-    &.enabled {
-      opacity: 0.7;
-    }
   }
 
   input {

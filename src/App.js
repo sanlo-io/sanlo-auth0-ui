@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useFlags } from "launchdarkly-react-client-sdk";
+// import { useFlags } from "launchdarkly-react-client-sdk";
 import styled from 'styled-components';
 import mixpanel from "mixpanel-browser";
 
@@ -13,6 +13,7 @@ import {
   StyledFormButton,
   StyledConfirmPassword,
   StyledForgotPassword,
+  StyledEye,
 } from './App.styled';
 
 import Error from './components/Error';
@@ -69,10 +70,6 @@ const StyledHeader = styled.div`
 `;
 
 const App = () => {
-  const {
-    clientAuth0ShowPasswordVisible = false,
-  } = useFlags();
-
   const [configLoaded, setConfigLoaded] = useState(false);
 
   const [config, setConfig] = useState({});
@@ -377,29 +374,29 @@ const App = () => {
             <StyledFormSection>
               <div className="label-container">
                 <label>{TEXT[authType].password_label}</label>
-                {clientAuth0ShowPasswordVisible && (
-                  <div
-                    className="show-password-toggle"
-                    onClick={onShowPasswordToggle}
-                  >Show Password</div>
-                )}
               </div>
-              <input
-                data-test-id="password-input"
-                ref={passwordInputRef}
-                data-type="password"
-                type="password"
-                placeholder="Enter your password"
-                onKeyDown={onInputChange}
-                onKeyUp={onInputChange}
-                onFocus={(e) => {
-                  setPasswordInputFocused(true);
-                }}
-                onBlur={(e) => {
-                  onInputChange(e)
-                  setPasswordInputFocused(false);
-                }}
-              />
+              <div className="input-container">
+                <input
+                  data-test-id="password-input"
+                  ref={passwordInputRef}
+                  data-type="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  onKeyDown={onInputChange}
+                  onKeyUp={onInputChange}
+                  onFocus={(e) => {
+                    setPasswordInputFocused(true);
+                  }}
+                  onBlur={(e) => {
+                    onInputChange(e)
+                    setPasswordInputFocused(false);
+                  }}
+                />
+                <StyledEye
+                  className="icss-eye"
+                  onClick={onShowPasswordToggle}
+                />
+              </div>
             </StyledFormSection>
           )}
 

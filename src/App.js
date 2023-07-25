@@ -115,7 +115,7 @@ const App = () => {
     if (authType.match(/reset/) && resetCount > 0) {
       setAuthType(resetCount === 1 ? "reset_sent" : "reset_resent");
     }
-  }, [resetCount]);
+  }, [resetCount, authType]);
 
   useEffect(() => {
     if (mainContainerRef.current) {

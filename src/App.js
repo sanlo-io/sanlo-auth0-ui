@@ -181,11 +181,13 @@ const App = () => {
     setIsLoading(true);
 
     const handleResponse = (err, resp) => {
+      console.log(err, resp);
+
       if (err) setError(parseError(err));
       setIsDisabled(false);
       setIsLoading(false);
       // We've just sent you an email to reset your password.
-      if (resp.match(/We've just sent/)) {
+      if (resp && resp.match(/We've just sent/)) {
         console.log(resetCount)
         setResetCount(resetCount + 1);
       }

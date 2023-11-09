@@ -223,6 +223,11 @@ const App = () => {
         connection: 'Username-Password-Authentication',
         email: emailInput,
       }, handleResponse);
+      // The gtag_report_conversion function is defined
+      // in the global scope in the html file
+      if (window.gtag_report_conversion && typeof window.gtag_report_conversion === "function") {
+        window.gtag_report_conversion();
+      }
     } else if (authType.match(/reset/)) {
       addToDataLayer({
         event: "Password Reset",

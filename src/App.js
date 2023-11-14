@@ -200,6 +200,7 @@ const App = () => {
         event: "Login Submit",
         email: emailInput,
       });
+      mixpanel.identify(emailInput);
       mixpanel.track("Login Submit", {
         email: emailInput,
       });
@@ -214,6 +215,7 @@ const App = () => {
         event: "Signup Submit",
         email: emailInput,
       });
+      mixpanel.identify(emailInput);
       mixpanel.track("Signup Submit", {
         email: emailInput,
       });
@@ -233,6 +235,7 @@ const App = () => {
         event: "Password Reset",
         email: emailInput,
       });
+      mixpanel.identify(emailInput);
       mixpanel.track("Password Reset", {
         email: emailInput,
       });

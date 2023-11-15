@@ -1,5 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
+import mixpanel from "mixpanel-browser";
 
 import { StyledFormButton } from "../App.styled";
 import { parseError } from "../utils/error";
@@ -31,6 +32,9 @@ const GoogleButton = ({
   const gtmClass = `gtm-sanlo-button-${authType}-google`;
 
   const onGoogleLogin = (e) => {
+    mixpanel.set_config({ api_transport: "sendBeacon" });
+    mixpanel.track("Google Login");
+
     const { queryParams } = config;
     const {
       clientToken,

@@ -200,6 +200,7 @@ const App = () => {
         event: "Login Submit",
         email: emailInput,
       });
+      mixpanel.set_config({ api_transport: "sendBeacon" });
       mixpanel.identify(emailInput);
       mixpanel.track("Login Submit", {
         email: emailInput,
@@ -215,6 +216,10 @@ const App = () => {
         event: "Signup Submit",
         email: emailInput,
       });
+      if (window.lintrk && typeof window.lintrk === "function") {
+        window.lintrk('track', { conversion_id: 14637900 });
+      }
+      mixpanel.set_config({ api_transport: "sendBeacon" });
       mixpanel.identify(emailInput);
       mixpanel.track("Signup Submit", {
         email: emailInput,
@@ -235,6 +240,7 @@ const App = () => {
         event: "Password Reset",
         email: emailInput,
       });
+      mixpanel.set_config({ api_transport: "sendBeacon" });
       mixpanel.identify(emailInput);
       mixpanel.track("Password Reset", {
         email: emailInput,
